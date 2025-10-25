@@ -6,14 +6,15 @@ import java.util.Stack;
 
 public class Expression implements ExpressionInterface {
     private String representation;
-    private Character[] operators = {'>', 'v', '^', '~'};
+    private final Character[]  operators = {'>', 'v', '^', '~'};
 
     public String getRepresentation() {
         return representation;
-    };
+    }
     public void setRepresentation(String representation) throws InvalidExpressionException {
         Stack<Character> stack = new Stack<>();
-        representation = representation.replaceAll("[\s]+", "");
+        representation = representation.replaceAll("\\s+", "");
+
         char[] expression = representation.toCharArray();
         StringBuilder result = new StringBuilder();
         if (representation.matches(".*([\\^v>]{2,}).*")) {
@@ -66,7 +67,7 @@ public class Expression implements ExpressionInterface {
             }
         }
         this.representation = result.toString();
-    };
+    }
     private boolean isOperator(Character c) {return Arrays.asList(operators).contains(c);}
     private int getPrecedence(Character operator) {
         return Arrays.asList(operators).indexOf(operator);
