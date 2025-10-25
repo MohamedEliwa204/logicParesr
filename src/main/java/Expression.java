@@ -16,7 +16,9 @@ public class Expression implements ExpressionInterface {
         representation = representation.replaceAll("[\s]+", "");
         char[] expression = representation.toCharArray();
         StringBuilder result = new StringBuilder();
-
+        if (representation.matches(".*([\\^v>]{2,}).*")) {
+            throw new InvalidExpressionException("Invalid Expression");
+        }
         for (int i = 0; i < expression.length; i++) {
             char curr = expression[i];
 
