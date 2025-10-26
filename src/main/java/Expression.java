@@ -14,7 +14,7 @@ public class Expression implements ExpressionInterface {
     public void setRepresentation(String representation) throws InvalidExpressionException {
         Stack<Character> stack = new Stack<>();
         representation = representation.replaceAll("\\s+", "");
-
+        representation = representation.replaceAll("~~", "");
         char[] expression = representation.toCharArray();
         StringBuilder result = new StringBuilder();
         if (representation.matches(".*([\\^v>]{2,}).*")) {
