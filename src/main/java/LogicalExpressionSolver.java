@@ -13,7 +13,6 @@ public class LogicalExpressionSolver implements LogicalExpressionSolverInterface
         this.map = map;
     }
 
-
     public boolean evaluateExpression(ExpressionInterface expression) throws InvalidExpressionException {
         char[] postfix = expression.getRepresentation().toCharArray();
         Stack<Boolean> stack = new Stack<>();
@@ -91,7 +90,7 @@ public class LogicalExpressionSolver implements LogicalExpressionSolverInterface
         }
     }
 
-     public static boolean isOperator(Character c) {
+    public static boolean isOperator(Character c) {
         return Arrays.asList(operators).contains(c);
     }
 }
