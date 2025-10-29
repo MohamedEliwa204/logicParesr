@@ -55,12 +55,14 @@ public class LogicalExpressionSolver implements LogicalExpressionSolverInterface
     public static boolean isValid(ExpressionInterface expression) throws InvalidExpressionException {
         char[] postfix = expression.getRepresentation().toCharArray();
         Stack<Boolean> stack = new Stack<>();
+        boolean hasOperators = false;
 
         try {
             for (int i = 0; i < postfix.length; i++) {
                 char curr = postfix[i];
 
                 if (isOperator(curr)) {
+                    hasOperators = true;
                     if (curr == '~') {
                         Boolean operand = stack.pop();
                         stack.push(!operand);
@@ -82,6 +84,7 @@ public class LogicalExpressionSolver implements LogicalExpressionSolverInterface
                     stack.push(true);
                 }
             }
+            if (!hasOperators) throw new InvalidExpressionException("Invalid Expression");
             return true;
         } catch (EmptyStackException error) {
             throw new InvalidExpressionException("Invalid Expression");
