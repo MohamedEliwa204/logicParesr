@@ -6,11 +6,16 @@ import java.util.Stack;
 
 public class Expression implements ExpressionInterface {
     private String representation;
-    private final Character[]  operators = {'>', 'v', '^', '~'};
+    private final Character[] operators = {'>', 'v', '^', '~'};
+
+    public Expression(String expression) throws InvalidExpressionException {
+        setRepresentation(expression);
+    }
 
     public String getRepresentation() {
         return representation;
     }
+
     public void setRepresentation(String representation) throws InvalidExpressionException {
         Stack<Character> stack = new Stack<>();
         representation = representation.replaceAll("\\s+", "");
@@ -57,8 +62,11 @@ public class Expression implements ExpressionInterface {
                     }
                 }
             }
-            else {
+            else if (Character.isAlphabetic(curr)) {
                 result.append(curr);
+            }
+            else {
+                throw new InvalidExpressionException("Invalid Expression");
             }
         }
         if(!stack.empty()) {
@@ -68,7 +76,11 @@ public class Expression implements ExpressionInterface {
         }
         this.representation = result.toString();
     }
-    private boolean isOperator(Character c) {return Arrays.asList(operators).contains(c);}
+
+    private boolean isOperator(Character c) {
+        return Arrays.asList(operators).contains(c);
+    }
+
     private int getPrecedence(Character operator) {
         return Arrays.asList(operators).indexOf(operator);
     }

@@ -6,38 +6,17 @@ import java.util.*;
 
 
 public class LogicalExpressionSolver implements LogicalExpressionSolverInterface {
-    private Character[] operators = {'>', 'v', '^', '~'};
+    private static Character[] operators = {'>', 'v', '^', '~'};
     private Map<Character, Boolean> map;
 
-    private void getMap(char[] expression) {
-        map = new HashMap<>();
-
-        for (int i = 0; i < expression.length; i++) {
-            char curr = expression[i];
-
-            if (!isOperator(curr) && !map.containsKey(curr)) {
-                while (true) {
-                    Scanner scan = new Scanner(System.in);
-                    System.out.print("Input Value of '" + curr + "' (true/false): ");
-                    String value = scan.nextLine();
-                    if (value.equals("true")) {
-                        map.put(curr, true);
-                        break;
-                    }
-                    else if (value.equals("false")) {
-                        map.put(curr, false);
-                        break;
-                    }
-                    System.out.println("Incorrect Value. Please Enter (true/false).");
-                }
-            }
-        }
+    public LogicalExpressionSolver(HashMap<Character, Boolean> map) {
+        this.map = map;
     }
 
     public boolean evaluateExpression(ExpressionInterface expression) throws InvalidExpressionException {
         char[] postfix = expression.getRepresentation().toCharArray();
         Stack<Boolean> stack = new Stack<>();
-        getMap(postfix);
+        if (map == null) throw new InvalidExpressionException("No Values Given");
 
         try {
             for (int i = 0; i < postfix.length; i++) {
@@ -70,9 +49,45 @@ public class LogicalExpressionSolver implements LogicalExpressionSolverInterface
         } catch (EmptyStackException error) {
             throw new InvalidExpressionException("Invalid Expression");
         }
-    };
+    }
 
-    private boolean isOperator(Character c) {
+    public static boolean isValid(ExpressionInterface expression) throws InvalidExpressionException {
+        char[] postfix = expression.getRepresentation().toCharArray();
+        Stack<Boolean> stack = new Stack<>();
+
+        try {
+            for (int i = 0; i < postfix.length; i++) {
+                char curr = postfix[i];
+
+                if (isOperator(curr)) {
+                    if (curr == '~') {
+                        Boolean operand = stack.pop();
+                        stack.push(!operand);
+                    } else {
+                        Boolean right = stack.pop(), left = stack.pop();
+                        switch (curr) {
+                            case '^':
+                                stack.push(left && right);
+                                break;
+                            case 'v':
+                                stack.push(left || right);
+                                break;
+                            case '>':
+                                stack.push(!left || right);
+                                break;
+                        }
+                    }
+                } else {
+                    stack.push(true);
+                }
+            }
+            return true;
+        } catch (EmptyStackException error) {
+            throw new InvalidExpressionException("Invalid Expression");
+        }
+    }
+
+    public static boolean isOperator(Character c) {
         return Arrays.asList(operators).contains(c);
     }
 }
