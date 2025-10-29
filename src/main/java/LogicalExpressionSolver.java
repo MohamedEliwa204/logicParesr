@@ -83,7 +83,7 @@ public class LogicalExpressionSolver implements LogicalExpressionSolverInterface
                     stack.push(true);
                 }
             }
-            if (!hasOperators) throw new InvalidExpressionException("Invalid Expression");
+            if (!hasOperators && postfix.length > 1) throw new InvalidExpressionException("Invalid Expression");
             return true;
         } catch (EmptyStackException error) {
             throw new InvalidExpressionException("Invalid Expression");
