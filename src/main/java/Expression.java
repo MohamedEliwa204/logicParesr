@@ -61,6 +61,9 @@ public class Expression implements ExpressionInterface {
             else if (Character.isAlphabetic(curr)) {
                 result.append(curr);
             }
+            else {
+                throw new InvalidExpressionException("Invalid Expression");
+            }
         }
         if(!stack.empty()) {
             while(!stack.empty()) {
